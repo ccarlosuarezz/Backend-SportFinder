@@ -4,18 +4,18 @@ from bs4 import BeautifulSoup
 class Product:
 
     def __init__(self, title, image, price, url):
-        self.title = title
+        self.title = self.cleanText(str(title))
         self.image = image
         self.price = price
         self.url = url
-        self.description = self.getDescription()
+        self.description = ''
         
-    def getDescription(self):
+    def setDescription(self, classDescription):
         productRequest = requests.get(self.url)
         productSoup = BeautifulSoup(productRequest.content, 'html.parser')
-        description = productSoup.find_all('p', attrs={"class":"ui-pdp-description__content"})
-        return self.cleanText(str(description))
+        newDescription = productSoup.find_all('p', attrs={"class":classDescription})
+        self.description = self.cleanText(str(newDescription))
     
     def cleanText(self, text):
-        newText = text.replace('<br/>', ' ').strip()
+        newText = text.replace(',', '.').strip()
         return newText

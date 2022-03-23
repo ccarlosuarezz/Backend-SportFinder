@@ -6,7 +6,7 @@ from scrapy.loader.processors import MapCompose
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 
-search = 'ciclismo'
+searchList = ['ciclismo', 'futbol', 'baloncesto']
 
 class Product(Item):
     description = Field()
@@ -22,6 +22,7 @@ class MercadoLibreCrawler(CrawlSpider):
 
     download_delay = 2
     allowed_domains = ['deportes.mercadolibre.com.co', 'articulo.mercadolibre.com.co']
+    
     start_urls = ['https://deportes.mercadolibre.com.co/ciclismo/']
     rules = (
         #Regla de paginacion
