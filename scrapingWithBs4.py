@@ -5,6 +5,7 @@ from Product import Product
 import pandas as pd
 
 searchList = ['ciclismo', 'futbol', 'baloncesto']
+# searchList = ['ciclismo']
 productList = []
 
 # MERCADOLIBRE ITEM PATHS
@@ -44,6 +45,8 @@ def scrapingMercadoLibre():
         for i in range(len(titleItems)):
             newProduct = Product(titleItems[i], imageItems[i], priceItems[i], urlItems[i])
             newProduct.setDescription('p', 'ui-pdp-description__content', '')
+            newProduct.setQualification('p', 'ui-pdp-reviews__rating__summary__average')
+            newProduct.setVotes('p', 'ui-pdp-reviews__rating__summary__label')
             productList.append(newProduct)
 
 
@@ -63,17 +66,21 @@ def scrapingLinio():
         for i in range(len(titleItems)):
             newProduct = Product(titleItems[i], imageItems[i], priceItems[i], urlItems[i])
             newProduct.setDescription('div', 'product-bg-container', 'linio')
+            newProduct.setQualification('span', 'review-subtitle-label body-accent-lg col-2')
+            newProduct.setVotes('div', 'chart-count')
             productList.append(newProduct)
 
 def generateCSV():
     scrapingMercadoLibre()
     scrapingLinio()
-    dataFrameProducts = pd.DataFrame(columns = ['Title', 'Image', 'Price', 'URL', 'Description'])
+    dataFrameProducts = pd.DataFrame(columns = ['Title', 'Image', 'Price', 'Qualification', 'Votes', 'URL', 'Description'])
     for product in productList:
         new_row = pd.DataFrame.from_records([{
             'Title': product.title,
             'Image': product.image,
             'Price': product.price,
+            'Qualification': product.qualification,
+            'Votes': product.votes,
             'URL': product.url,
             'Description': product.description
         }])
